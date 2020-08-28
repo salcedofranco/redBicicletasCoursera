@@ -10228,7 +10228,7 @@ body {
   height: auto;
   min-height: 35rem;
   padding: 15rem 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(30, 255, 0, 0.7) 75%, #000000 100%), url("../assets/img/bg-masthead.jpg");
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(2, 185, 42, 0.877) 75%, #000000 100%), url("../assets/img/bg-masthead.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -10239,7 +10239,7 @@ body {
   font-size: 2.5rem;
   line-height: 2.5rem;
   letter-spacing: 0.8rem;
-  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(85, 255, 6, 0));
+  background: linear-gradient(rgba(141, 141, 141, 0.9), rgba(5, 8, 4, 0.664));
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
           background-clip: text;
