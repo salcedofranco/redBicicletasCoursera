@@ -33,11 +33,12 @@ Bicicleta.removeById = function(aBiciId) {
 }
 
 
-
+/* PASO BICICLETAS POR DEFAULT 
 var a = new Bicicleta(1, 'rojo', 'urbana', [-32.986816,-68.882142]);
 var b = new Bicicleta(2, 'azul', 'urbana', [-32.985938,-68.881638]);
 
 Bicicleta.add(a);
 Bicicleta.add(b);
+*/
 
 module.exports = Bicicleta;
