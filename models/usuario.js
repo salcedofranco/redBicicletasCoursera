@@ -6,7 +6,7 @@ var usuarioSchema = new Schema({
     nombre: String,
 });
 
-usuarioSchema.methods.reservar = function(biciId, desde, hasta, cd){
+usuarioSchema.methods.reservar = function(biciId, desde, hasta, cb){
     var reserva = new Reserva({usuario: this._id, bicicleta: biciId, desde: desde, hasta: hasta})
     console.log(reserva);
     reserva.save(cb);
