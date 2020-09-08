@@ -18,7 +18,7 @@ body#LoginForm
             div.alert.alert-danger
               = info.message
           h2 Admin Login
-          p Por favor, ingrese su email and password
+          p Por favor, ingrese su email y contraseña
         form#Login(action='/login' method='post')
           .form-group
             input#username.form-control(type='email' placeholder='Email Address' name="username")

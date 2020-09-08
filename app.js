@@ -63,8 +63,26 @@ app.get('/login', function(req, res) {
 });
 
 app.post('/login', function(req, res, next) {
-  //passport
+  passport.authenticate('local', function(err, usuario, info){
+    if (err) return next(err);
+    if (!usuario) return res. render('session/login', {info});
+    req.logIn(usuario, function(err) {
+      if (err) return next(err);
+      return res.redirect('/');
+    });
+  })(req, res, next)
 });
+
+app.get('/logout', function(req, res){
+  req.logOut();
+  res.redirect('/');
+});
+
+
+app.get('/forgotPassword', function(req, res){
+
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
