@@ -55,7 +55,7 @@ app.use('/bicicletas',loggedIn, bicicletasRouter);
 app.use("/token", tokenRouter);
 
 //API
-app.use('/api/bicicletas', bicicletasAPIRouter);
+app.use('/api/bicicletas', validarUsuario, bicicletasAPIRouter);
 app.use('/api/usuarios', usuariosAPIRouter);
 
 
@@ -172,6 +172,21 @@ function loggedIn(req, res, next) {
   }
 }
 
-
+function validarUsuario(req, res, next) {
+  jwt.verify(req.headers["x-access-token"], req.app.get("secretKey"), function (
+    err,
+    decoded
+  ) {
+    if (err) {
+      console.log("Error en validar usuario");
+      res.json({ status: "error", message: err.message, data: null });
+    } else {
+      console.log("Pasó el usuario:" + req.body.userId);
+      req.body.userId = decode.id;
+      console.log("JWT verify:" + decoded);
+      next();
+    }
+  });
+}
 
 module.exports = app;
