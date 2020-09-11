@@ -1,3 +1,4 @@
+require("dotenv").config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -26,6 +27,7 @@ app.use(session({
 
 //mongoose
 var mongoose = require('mongoose');
+const usuario = require('./models/usuario');
 
 var mongoDB = 'mongodb://localhost/red_bicicletas';
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true });
@@ -48,8 +50,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //rutas
 app.use('/', indexRouter);
-app.use("/usuarios", usersRouter);
-app.use('/bicicletas', bicicletasRouter);
+app.use("/usuarios", loggedIn, usersRouter);
+app.use('/bicicletas',loggedIn, bicicletasRouter);
 app.use("/token", tokenRouter);
 
 //API
@@ -70,7 +72,7 @@ app.post('/login', function(req, res, next) {
       if (err) return next(err);
       return res.redirect('/');
     });
-  })(req, res, next)
+  })(req, res, next);
 });
 
 app.get('/logout', function(req, res){
@@ -80,14 +82,74 @@ app.get('/logout', function(req, res){
 
 
 app.get('/forgotPassword', function(req, res){
+  res.render('session/forgotPassword');
 
 });
+
+app.post('forgotPassword', function(req, res) {
+  usuario.findOne({ email: req.body.email }, function(err, usuario) {
+    if (!usuario) return res.render('session/forgotPassword', {info: {message: 'No existe usuario'}})
+
+    usuario.resetPassword(function(err){
+      if (err) return next(err);
+      console.log('session/forgotPasswordMessage');
+    });
+
+    res.render('session/forgotPasswordMessage')
+  });
+});
+
+app.get('/resetPassword/:token', function(req, res, next){
+  Token.findOne({ token: req.params.token }, function (err, token) {
+    if (!token) return res.status(400).send({ type: 'not-verified', msg: 'No existe usuario'})
+    
+    usuario.findById(token._userId, function (err, usuario) {
+      if (!usuario) return res.status(400).send({ msg: 'No existe un usuario asociado'})
+      res.render('session/resetPassword', {errors: {}, usuario:usuario});
+    });
+  });
+});
+
+app.post('/resetPassword', function(req, res){
+  if (req.body.password != req.body.confirm_password) {
+    res.render('session/resetPassword', { errors: {confirm_password: {message: 'No coincide'}}})
+    return;
+  } 
+
+  Usuario.findOne({ email: req.body.email }, function (err, usuario){
+    usuario.password = req.body.password;
+    usuario.save(function(err){
+      if (err) {
+        res.render('session/resetPassword', {errors: err.errors, usuario: new Usuario})
+      }else{
+        res.redirect('/login');
+      }});
+  });
+});
+
+
+/*
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ["profile", "email"]})
+);
+
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect(`http://localhost:3000/`);
+});
+
+*/
+
 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -99,5 +161,17 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+//aseguramos que el usuario este logueado
+function loggedIn(req, res, next) {
+  if (req.user) {
+    next();
+  } else {
+    console.log("Usuario sin loguearse");
+    res.redirect("/login");
+  }
+}
+
+
 
 module.exports = app;
