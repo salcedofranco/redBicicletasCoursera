@@ -6,6 +6,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const passport = require("./config/passport");
 const session = require("express-session");
+const jwt = require('jsonwebtoken');
+
 
 var indexRouter = require('./routes/index');
 var tokenRouter = require("./routes/token");
@@ -17,6 +19,9 @@ var usuariosAPIRouter = require('./routes/api/usuarios');
 const store = new session.MemoryStore;
 
 var app = express();
+
+app.set("secretKey", "jwt_pwd_!!223344");
+
 app.use(session({
   cookie: { maxAge: 240 * 60 * 60 * 1000 },
     store: store,
@@ -27,7 +32,8 @@ app.use(session({
 
 //mongoose
 var mongoose = require('mongoose');
-const usuario = require('./models/usuario');
+const Usuario = require('./models/usuario');
+const Token = require('./models/token');
 
 var mongoDB = 'mongodb://localhost/red_bicicletas';
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true });
@@ -57,6 +63,7 @@ app.use("/token", tokenRouter);
 //API
 app.use('/api/bicicletas', validarUsuario, bicicletasAPIRouter);
 app.use('/api/usuarios', usuariosAPIRouter);
+app.use('/api/auth', authAPIRouter);
 
 
 //PASSPORT
@@ -88,7 +95,7 @@ app.get('/forgotPassword', function(req, res){
 
 app.post('forgotPassword', function(req, res) {
   usuario.findOne({ email: req.body.email }, function(err, usuario) {
-    if (!usuario) return res.render('session/forgotPassword', {info: {message: 'No existe usuario'}})
+    if (!usuario) return res.render('session/forgotPassword', {info: {message: 'No existe el email para el usuario existente'}});
 
     usuario.resetPassword(function(err){
       if (err) return next(err);
@@ -101,10 +108,10 @@ app.post('forgotPassword', function(req, res) {
 
 app.get('/resetPassword/:token', function(req, res, next){
   Token.findOne({ token: req.params.token }, function (err, token) {
-    if (!token) return res.status(400).send({ type: 'not-verified', msg: 'No existe usuario'})
+    if (!token) return res.status(400).send({ type: 'not-verified', msg: 'No existe usuario asociado al token. Verifique que su token no haya expirado' });
     
     usuario.findById(token._userId, function (err, usuario) {
-      if (!usuario) return res.status(400).send({ msg: 'No existe un usuario asociado'})
+      if (!usuario) return res.status(400).send({ msg: 'No existe un usuario asociado al token'})
       res.render('session/resetPassword', {errors: {}, usuario:usuario});
     });
   });
@@ -112,7 +119,7 @@ app.get('/resetPassword/:token', function(req, res, next){
 
 app.post('/resetPassword', function(req, res){
   if (req.body.password != req.body.confirm_password) {
-    res.render('session/resetPassword', { errors: {confirm_password: {message: 'No coincide'}}})
+    res.render('session/resetPassword', { errors: {confirm_password: {message: 'No coincide con el password ingresado'}}})
     return;
   } 
 
@@ -120,7 +127,7 @@ app.post('/resetPassword', function(req, res){
     usuario.password = req.body.password;
     usuario.save(function(err){
       if (err) {
-        res.render('session/resetPassword', {errors: err.errors, usuario: new Usuario})
+        res.render('session/resetPassword', {errors: err.errors, usuario: new Usuario({email: req.body.email})});
       }else{
         res.redirect('/login');
       }});
