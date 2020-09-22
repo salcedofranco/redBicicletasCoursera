@@ -18,9 +18,8 @@ var bicicletasAPIRouter = require('./routes/api/bicicletas');
 var usuariosAPIRouter = require('./routes/api/usuarios');
 var authAPIRouter = require('./routes/api/auth');
 
-const store = new session.MemoryStore;
-
 let store;
+
 if (process.env.NODE_ENV === "development") {
   store = new session.MemoryStore();
 } else {
