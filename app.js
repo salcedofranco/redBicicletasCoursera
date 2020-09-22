@@ -69,6 +69,11 @@ app.use('/api/usuarios', usuariosAPIRouter);
 app.use('/api/auth', authAPIRouter);
 
 
+//politica de privacidad google outh
+app.use('/privacy_policy', function(req, res){
+  res.sendFile('public/policy_privacy.html');
+});
+
 //PASSPORT
 app.get('/login', function(req, res) {
   res.render('session/login');
