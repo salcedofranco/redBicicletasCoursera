@@ -74,6 +74,10 @@ app.use('/privacy_policy', function(req, res){
   res.sendFile('public/policy_privacy.html');
 });
 
+app.use('/googlefb2ad30e42341a79', function(req, res){
+  res.sendFile('public/googlefb2ad30e42341a79.html');
+});
+
 //PASSPORT
 app.get('/login', function(req, res) {
   res.render('session/login');
