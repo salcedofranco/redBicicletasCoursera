@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -15,6 +15,7 @@ var usersRouter = require('./routes/usuarios');
 var bicicletasRouter = require('./routes/bicicletas');
 var bicicletasAPIRouter = require('./routes/api/bicicletas');
 var usuariosAPIRouter = require('./routes/api/usuarios');
+var authAPIRouter = require('./routes/api/auth');
 
 const store = new session.MemoryStore;
 
@@ -35,7 +36,9 @@ var mongoose = require('mongoose');
 const Usuario = require('./models/usuario');
 const Token = require('./models/token');
 
-var mongoDB = 'mongodb://localhost/red_bicicletas';
+//var mongoDB = 'mongodb://localhost/red_bicicletas';
+var mongoDB = process.env.MONGO_URI;
+
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
 
