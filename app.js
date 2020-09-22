@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const passport = require("./config/passport");
 const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 const jwt = require('jsonwebtoken');
 
 
@@ -18,6 +19,20 @@ var usuariosAPIRouter = require('./routes/api/usuarios');
 var authAPIRouter = require('./routes/api/auth');
 
 const store = new session.MemoryStore;
+
+let store;
+if (process.env.NODE_ENV === "development") {
+  store = new session.MemoryStore();
+} else {
+  store = new MongoDBStore({
+    uri: process.env.MONGO_URI,
+    collection: "sessions",
+  });
+  store.on("error", function (err) {
+    assert.ifError(err);
+    assert.ok(false);
+  });
+}
 
 var app = express();
 
@@ -35,6 +50,7 @@ app.use(session({
 var mongoose = require('mongoose');
 const Usuario = require('./models/usuario');
 const Token = require('./models/token');
+
 
 //var mongoDB = 'mongodb://localhost/red_bicicletas';
 var mongoDB = process.env.MONGO_URI;
@@ -77,6 +93,27 @@ app.use('/privacy_policy', function(req, res){
 app.use('/googlefb2ad30e42341a79', function(req, res){
   res.sendFile('public/googlefb2ad30e42341a79.html');
 });
+
+//LOGIN GOOGLE
+app.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: [
+      "https://www.googleapis.com/auth/plus.login",
+      "https://www.googleapis.com/auth/plus.profile.emails.read",
+      "profile",
+      "email",
+    ],
+  })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+  })
+);
 
 //PASSPORT
 app.get('/login', function(req, res) {
@@ -145,21 +182,6 @@ app.post('/resetPassword', function(req, res){
       }});
   });
 });
-
-
-/*
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ["profile", "email"]})
-);
-
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect(`http://localhost:3000/`);
-});
-
-*/
 
 
 

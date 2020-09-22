@@ -108,8 +108,38 @@ usuarioSchema.methods.enviar_email_bienvenida = function (cb) {
           "Se ha enviado un email de bienvenida a: " + email_destination
         );
       });
+      cb(null);
     });
   };
+
+  usuarioSchema.statics.findOneOrCreateByGoogle = function findOneOrCreate(condition, callback) {
+    const self = this;
+    console.log(condition);
+    self.findOne({
+       $or: [
+          {'googleId': condition.id}, {'email': condition.emails[0].value}
+    ]}, (err, result) => {
+          if (result) {
+             callback(err, result)
+          } else {
+             console.log('=========== CONDITION ===========');
+             console.log(condition);
+             let values = {};
+             values.googleId = condition.id;
+             values.email = condition.emails[0].value;
+             values.nombre = condition.displayName || 'SIN NOMBRE';
+             values.verificado = true;
+             values.password = condition._json.etag;
+             console.log('========== VALUES ============');
+             console.log(values);
+             self.create(values, (err, result) => {
+                if (err) {console.log(err);}
+                return callback(err, result)
+             })
+          }
+    
+    })
+ };
 
 
 

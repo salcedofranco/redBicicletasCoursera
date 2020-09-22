@@ -16,7 +16,7 @@ passport.use(new LocalStrategy (
 
 ));
 
-/*
+
 passport.use(
     new GoogleStrategy(
       {
@@ -25,6 +25,8 @@ passport.use(
         callbackURL: process.env.HOST + "/auth/google/callback",
       },
       function (accesToken, refreshToken, profile, cb) {
+        console.log(profile);  
+
         Usuario.findOneOrCreateByGoogle(profile, function (err, user) {
           return cb(err, user);
         });
@@ -32,7 +34,7 @@ passport.use(
     )
   );
  
-
+/*
   //lo de la documentacion medium
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
