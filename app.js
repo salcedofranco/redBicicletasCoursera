@@ -175,10 +175,14 @@ app.post('/resetPassword', function(req, res){
     usuario.password = req.body.password;
     usuario.save(function(err){
       if (err) {
-        res.render('session/resetPassword', {errors: err.errors, usuario: new Usuario({email: req.body.email})});
+        res.render('session/resetPassword', {
+          errors: err.errors, 
+          usuario: new Usuario({ email: req.body.email })
+        });
       }else{
         res.redirect('/login');
-      }});
+      }
+    });
   });
 });
 

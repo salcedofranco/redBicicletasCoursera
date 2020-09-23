@@ -15,10 +15,7 @@ module.exports = {
 
   update: function (req, res, next) {
     var update_values = { nombre: req.body.nombre };
-    Usuario.findByIdAndUpdate(req.params.id, update_values, function (
-      err,
-      usuario
-    ) {
+    Usuario.findByIdAndUpdate(req.params.id, update_values, function (err, usuario) {
       if (err) {
         console.log(err);
         res.render("usuarios/update", {
@@ -29,7 +26,7 @@ module.exports = {
           }),
         });
       } else {
-        res.redirect("usuarios");
+        res.redirect("/usuarios");
         return;
       }
     });
@@ -45,6 +42,7 @@ module.exports = {
         errors: {
           confirm_password: { message: "No coinciden las contraseñas" },
         },
+        
         usuario: new Usuario({
           nombre: req.body.nombre,
           email: req.body.email,
