@@ -38,7 +38,6 @@ var usuarioSchema = new Schema({
 
       password: {
         type: String,
-        trim: true,
         required: [true, "El password es obligatorio"],
       },
 
@@ -48,6 +47,9 @@ var usuarioSchema = new Schema({
             type: Boolean,
             default: false,
         },
+
+        googleId: String,
+        facebookId: String
 
 });
 
