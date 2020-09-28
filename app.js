@@ -14,6 +14,7 @@ var indexRouter = require('./routes/index');
 var tokenRouter = require("./routes/token");
 var usersRouter = require('./routes/usuarios');
 var bicicletasRouter = require('./routes/bicicletas');
+
 var bicicletasAPIRouter = require('./routes/api/bicicletas');
 var usuariosAPIRouter = require('./routes/api/usuarios');
 var authAPIRouter = require('./routes/api/auth');
@@ -47,8 +48,8 @@ app.use(session({
 
 //mongoose
 var mongoose = require('mongoose');
-const Usuario = require('./models/usuario');
-const Token = require('./models/token');
+const usuario = require('./models/usuario');
+const token = require('./models/token');
 
 
 //var mongoDB = 'mongodb://localhost/red_bicicletas';
@@ -72,23 +73,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//rutas
-app.use('/', indexRouter);
-app.use("/usuarios", loggedIn, usersRouter);
-app.use('/bicicletas',loggedIn, bicicletasRouter);
-app.use("/token", tokenRouter);
-
-//API
-app.use('/api/bicicletas', validarUsuario, bicicletasAPIRouter);
-app.use('/api/usuarios', usuariosAPIRouter);
-app.use('/api/auth', authAPIRouter);
-
-
-//politica de privacidad google outh
-app.use('/privacy_policy', function(req, res){
-  res.sendFile('public/policy_privacy.html');
-});
-
 app.use('/googlefb2ad30e42341a79', function(req, res){
   res.sendFile('public/googlefb2ad30e42341a79.html');
 });
@@ -110,9 +94,10 @@ app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
     successRedirect: "/",
-    failureRedirect: "/login",
+    failureRedirect: "/error",
   })
 );
+
 
 //PASSPORT
 app.get('/login', function(req, res) {
@@ -185,6 +170,26 @@ app.post('/resetPassword', function(req, res){
     });
   });
 });
+
+
+
+//rutas
+app.use('/', indexRouter);
+app.use("/usuarios", loggedIn, usersRouter);
+app.use('/bicicletas',loggedIn, bicicletasRouter);
+app.use("/token", tokenRouter);
+
+//API
+app.use('/api/bicicletas', validarUsuario, bicicletasAPIRouter);
+app.use('/api/usuarios', validarUsuario, usuariosAPIRouter);
+app.use('/api/auth', authAPIRouter);
+
+
+//politica de privacidad google outh
+app.use('/privacy_policy', function(req, res){
+  res.sendFile('public/policy_privacy.html');
+});
+
 
 
 

@@ -2,16 +2,19 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var bicicletaSchema = new Schema({
-    code: Number,//no se puede id pq es una palabra reservada de mongo
+    code: Number,
     color: String,
     modelo: String,
     ubicacion: {
-        type: [Number], index: { type: '2dsphere', sparse: true } //indice tipo geografico
+        type: [Number], 
+        index: {
+            type: '2dsphere', 
+            sparse: true 
+        }
     }
-
 });
 
-bicicletaSchema.statics.createInstance = function(code, color, modelo, ubicacion){
+bicicletaSchema.statics.createInstance = function (code, color, modelo, ubicacion) {
     return new this({
         code: code,
         color: color,
@@ -20,30 +23,25 @@ bicicletaSchema.statics.createInstance = function(code, color, modelo, ubicacion
     });
 };
 
-
-//metodos de instancia
-bicicletaSchema.methods.toString = function() {
+bicicletaSchema.methods.toString = function () {
     return 'code: ' + this.code + ' | color: ' + this.color;
 };
 
-//traigo todas las bicis
-bicicletaSchema.statics.allBicis = function(cb){
+bicicletaSchema.statics.allBicis = function (cb) {
     return this.find({}, cb);
 };
 
-bicicletaSchema.statics.add = function(aBici, cb){
-    this.create(aBici, cb);
+bicicletaSchema.statics.add = function (oBici, cb) {
+    this.create(oBici, cb);
 };
 
-bicicletaSchema.statics.findByCode = function(aCode, cb){
-    return this.findOne({code: aCode}, cb);
+bicicletaSchema.statics.findByCode = function (ncode, cb) {
+    return this.findOne({ code: ncode }, cb);
 };
 
-bicicletaSchema.statics.deleteByCode = function(aCode, cb){
-    return this.deleteOne({code: aCode}, cb);
+bicicletaSchema.statics.removeByCode = function (ncode, cb) {
+    return this.deleteOne({ code: ncode }, cb);
 };
-
-
 
 module.exports = mongoose.model('Bicicleta', bicicletaSchema);
 

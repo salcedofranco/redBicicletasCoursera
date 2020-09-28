@@ -1,32 +1,32 @@
 extends ../layout
 
 block content
-    a(href='/bicicletas') Volver
+  a(href="/bicicletas" class="btn btn-link") Volver
 
-    br
-    br
-    br
+  br
+  br
+  br
 
-    h1 Actualizar Bicicleta
+  h1 Actualizando Bicicleta
 
+  br
+  br
+
+  form(action=`/bicicletas/${ bici.code }/update` method="post")
+    label(for="code") Código:
+    input#code(type="text" name="code" value=bici.code)
+    br
+    label(for="color") Color:
+    input#color(type="text" name="color" value=bici.color)
+    br
+    label(for="modelo") Modelo:
+    input#modelo(type="text" name="modelo" value=bici.modelo)
+    br
+    label(for="lat") Latitud:
+    input#lat(type="text" name="lat" value=bici.ubicacion[0])
+    br
+    label(for="lng") Longitud:
+    input#lng(type="text" name="lng" value=bici.ubicacion[1])
     br
     br
-
-    form(action=`/bicicletas/${bici.id}/update` method='post')
-        label(for='id') ID:
-        input#id(type='text' name='id' value=bici.id)
-        br
-        label(for='color') Color:
-        input#color(type='text' name='color' value=bici.id)
-        br
-        label(for='modelo') Modelo:
-        input#modelo(type='text' name='modelo' value=bici.id)
-        br
-        label(for='lat') Latitud:
-        input#modelo(type='text' name='lat' value=bici.ubicacion[0])
-        br
-        label(for='lng') Longitud:
-        input#modelo(type='text' name='lng' value=bici.ubicacion[1])
-        br
-        br
-        input.btn(type='submit' value='ok')
+    input.btn(type="submit" class="btn btn-primary" value="OK")

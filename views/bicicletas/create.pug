@@ -1,32 +1,32 @@
 extends ../layout
 
 block content
-    a(href='/bicicletas') Volver
+  a(href="/bicicletas" class="btn btn-link") Volver
 
-    br
-    br
-    br
+  br
+  br
+  br
 
-    h1 Nueva Bicicleta
+  h1 Nueva Bicicleta
 
+  br
+  br
+
+  form(action="/bicicletas/create" method="post")
+    label(for="code") Código:
+    input#code(type="text" name="code")
+    br
+    label(for="color") Color:
+    input#color(type="text" name="color")
+    br
+    label(for="modelo") Modelo:
+    input#modelo(type="text" name="modelo")
+    br
+    label(for="lat") Latitud:
+    input#lat(type="text" name="lat")
+    br
+    label(for="lng") Longitud:
+    input#lng(type="text" name="lng")
     br
     br
-
-    form(action='/bicicletas/create' method='post')
-        label(for='id') ID:
-        input#id(type='text' name='id')
-        br
-        label(for='color') Color:
-        input#color(type='text' name='color')
-        br
-        label(for='modelo') Modelo:
-        input#modelo(type='text' name='modelo')
-        br
-        label(for='lat') Latitud:
-        input#modelo(type='text' name='lat')
-        br
-        label(for='lng') Longitud:
-        input#modelo(type='text' name='lng')
-        br
-        br
-        input.btn(type='submit' value='ok')
+    input.btn(type="submit" class="btn btn-primary" value="OK")

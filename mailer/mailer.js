@@ -27,8 +27,8 @@ if (process.env.NODE_ENV === 'production'){
         host: 'sntp.ethereal.email',
         port: 587,
         auth: {
-          user: process.env.ethereal_user,
-          pass: process.env.ethereal_pwd
+          user: process.env.ETHEREAL_USER,
+          pass: process.env.ETHEREAL_PWD
         }
       };
     }

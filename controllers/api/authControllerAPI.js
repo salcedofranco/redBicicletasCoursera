@@ -1,6 +1,6 @@
-const Usuario = require("../../models/usuario");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Usuario = require("../../models/usuario");
 
 module.exports = {
   authenticate: function (req, res, next) {
@@ -16,10 +16,8 @@ module.exports = {
             data: null,
           });
         }
-        if (
-          userInfo != null &&
-          bcrypt.compareSync(req.body.password, userInfo.password)
-        ) {
+
+        if (userInfo != null && bcrypt.compareSync(req.body.password, userInfo.password)) {
           const token = jwt.sign(
             { id: userInfo._id },
             req.app.get("secretKey"),
@@ -39,16 +37,20 @@ module.exports = {
       }
     });
   },
+
   forgotPassword: function (req, res, next) {
     Usuario.findOne({ email: req.body.email }, function (err, usuario) {
-      if (!usuario)
-        return res
-          .status(401)
-          .json({ message: "No existe el usuario", data: null });
+      if (!usuario) {
+        return res.status(401).json({ 
+          message: "No existe el usuario", 
+          data: null });
+        }
+
       usuario.resetPassword(function (err) {
         if (err) {
           return next(err);
         }
+
         res.status(200).json({
           message: "Se envio un email para reestablecer el password",
           data: null,
@@ -59,11 +61,9 @@ module.exports = {
   
   authFacebookToken: function (req, res, next) {
     if (req.user) {
-      req.user
-        .save()
-        .then(() => {
-          const token = jwt.sign(
-            { id: req.user.id },
+      req.user.save().then(() => {
+          const token = jwt.sign({ 
+            id: req.user.id },
             req.app.get("secretKey"),
             { expiresIn: "7d" }
           );
@@ -75,8 +75,7 @@ module.exports = {
               token: token,
             },
           });
-        })
-        .catch((err) => {
+        }).catch((err) => {
           console.log(err);
           res.status(500).json({ message: err.message });
         });
