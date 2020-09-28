@@ -28,17 +28,31 @@ block content
     .container
       .row
         .col-lg-8.mx-auto
-          h2.text-white.mb-4 Bicisendas del departamento
+          h2.text-white.mb-4 Inclusion - Bicisendas - Senderos - Montaña
           p.text-white-50
-            | Encontra en nuestro mapa las ubicaciones de cada bicisenda de Lujan de Cuyo
-             
-      img.img-fluid(src='/images/bicisenda.jpg' alt='')
+            | Recorre tu ciudad en bicicleta
+    #carouselExampleControls.carousel.slide(data-ride='carousel')
+      .carousel-inner
+        .carousel-item.active
+          img.d-block.w-100(src='/images/montaña.jpg' alt='...')
+        .carousel-item
+          img.d-block.w-100(src='/images/bici-inclusiva.jpg' alt='...')
+        .carousel-item
+          img.d-block.w-100(src='/images/bicisenda.jpg' alt='...')
+      a.carousel-control-prev(href='#carouselExampleControls' role='button' data-slide='prev')
+        span.carousel-control-prev-icon(aria-hidden='true')
+        span.sr-only Previous
+      a.carousel-control-next(href='#carouselExampleControls' role='button' data-slide='next')
+        span.carousel-control-next-icon(aria-hidden='true')
+        span.sr-only Next
+  //carousel
+  
   // Projects
   section#projects.projects-section.bg-light
     .container
       .row
         .col-lg-8.mx-auto.text-center
-          h2.text-black.mb-4 Nuestro Mapa
+          h2.text-black.mb-4 Mapa
       #main_map
   // Signup
   section#signup.signup-section
@@ -46,10 +60,10 @@ block content
       .row
         .col-md-10.col-lg-8.mx-auto.text-center
           i.far.fa-paper-plane.fa-2x.mb-2.text-white
-          h2.text-white.mb-5 Subscribe to receive updates!
+          h2.text-white.mb-5 Suscribite para recibir toda nuestra informacion!
           form.form-inline.d-flex
-            input#inputEmail.form-control.flex-fill.mr-0.mr-sm-2.mb-3.mb-sm-0(type='email' placeholder='Enter email address...')
-            button.btn.btn-primary.mx-auto(type='submit') Subscribe
+            input#inputEmail.form-control.flex-fill.mr-0.mr-sm-2.mb-3.mb-sm-0(type='email' placeholder='Ingresa tu email...')
+            button.btn.btn-primary.mx-auto(type='submit') Suscribir
   // Contact
   section.contact-section.bg-black
     .container
@@ -58,9 +72,9 @@ block content
           .card.py-4.h-100
             .card-body.text-center
               i.fas.fa-map-marked-alt.text-primary.mb-2
-              h4.text-uppercase.m-0 Address
+              h4.text-uppercase.m-0 Direccion
               hr.my-4
-              .small.text-black-50 4923 Market Street, Orlando FL
+              .small.text-black-50 Calle Mitre, Chacras
         .col-md-4.mb-3.mb-md-0
           .card.py-4.h-100
             .card-body.text-center
@@ -68,14 +82,14 @@ block content
               h4.text-uppercase.m-0 Email
               hr.my-4
               .small.text-black-50
-                a(href='#!') hello@yourdomain.com
+                a(href='#!') lujanbici@gmail.com
         .col-md-4.mb-3.mb-md-0
           .card.py-4.h-100
             .card-body.text-center
               i.fas.fa-mobile-alt.text-primary.mb-2
-              h4.text-uppercase.m-0 Phone
+              h4.text-uppercase.m-0 Telefono
               hr.my-4
-              .small.text-black-50 +1 (555) 902-8832
+              .small.text-black-50 4963967
       .social.d-flex.justify-content-center
         a.mx-2(href='#!')
           i.fab.fa-twitter
@@ -85,7 +99,7 @@ block content
           i.fab.fa-github
   // Footer
   footer.footer.bg-black.small.text-center.text-white-50
-    .container Copyright &copy; Your Website 2020
+    .container Copyright &copy; Proyecto del curso de Coursera 2020
   // Bootstrap core JS
   script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js')
   script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js')
