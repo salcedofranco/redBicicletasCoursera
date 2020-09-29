@@ -1,4 +1,6 @@
+require('newrelic');
 require('dotenv').config();
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -56,6 +58,7 @@ const Token = require('./models/token');
 var mongoDB = process.env.MONGO_URI;
 
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true });
+mongoose.set('useCreateIndex', true);
 mongoose.Promise = global.Promise;
 
 var db = mongoose.connection;
