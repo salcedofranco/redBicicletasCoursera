@@ -7,12 +7,24 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 //llamada a ajax. Reques asincronico , solicitud a web json
 
 $.ajax({
-    dataType: "json",
-    url: "api/bicicletas",
-    success: function(result){
+    method: 'POST',
+    dataType: 'json',
+    url: 'api/auth/authenticate',
+    data: { email: 'fcedo13clash@maltacp.com', password: 'keko' },
+}).done(function( data ) {
+    console.log(data);
+
+    $.ajax({
+        dataType: 'json',
+        url: 'api/bicicletas',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("x-access-token", data.data.token);
+        }
+    }).done(function (result) {
         console.log(result);
-        result.bicicletas.forEach(function(bici){
-            L.marker(bici.ubicacion, {title: bici.id}).addTo(map);
+
+        result.bicicletas.forEach(bici => {
+            L.marker(bici.ubicacion, { title: bici.id }).addTo(map);
         });
-    }
-})
+    });
+});

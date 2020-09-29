@@ -4,7 +4,7 @@ var Token = require("../models/token");
 module.exports = {
   confirmationGet: function (req, res, next) {
     Token.findOne({ token: req.params.token }, function (err, token) {
-      console.log(token + " " + token._userId);
+      console.log(token + " " + token.usuario);
       if (!token)
         return res.status(400).send({
             type: "not-verified",
@@ -12,7 +12,7 @@ module.exports = {
           });
         
 
-      Usuario.findById(token._userId, function (err, usuario) {
+      Usuario.findById(token.usuario, function (err, usuario) {
         if (!usuario)
           return res.status(400).send({ msg: "No se encontró a ese usuario" });
 

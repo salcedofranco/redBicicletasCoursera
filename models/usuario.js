@@ -90,9 +90,9 @@ usuarioSchema.methods.enviar_email_bienvenida = function (cb) {
             to: email_destination,
             subject: 'Verificación de Cuenta',
             text: 'Hola,\n\n' + 'Por favor, para verificar su cuenta haga click en este link:\n\n' +
-                  process.env.APP_BASE_URL + '\/token/confirmation\/' + token.token + '.\n',
+                  process.env.HOST + '\/token/confirmation\/' + token.token + '.\n',
             html: 'Hola,<br><br>' + 'Por favor, para verificar su cuenta haga click en este link:<br><br>' +
-                  '<a href="' + process.env.APP_BASE_URL + '\/token/confirmation\/' + token.token + 
+                  '<a href="' + process.env.HOST + '\/token/confirmation\/' + token.token + 
                   '" target="_blank">Activar Usuario</a>.<br>'
         };
 
@@ -120,9 +120,9 @@ usuarioSchema.methods.resetPassword = function (cb) {
             to: email_destination,
             subject: 'Reseteo de Password de Cuenta',
             text: 'Hola,\n\n' + 'Por favor, para resetear el password de su cuenta haga click en este link:\n\n' +
-                  process.env.APP_BASE_URL + '\/resetPassword\/' + token.token + '.\n',
+                  process.env.HOST + '\/resetPassword\/' + token.token + '.\n',
             html: 'Hola,<br><br>' + 'Por favor, para resetear el password de su cuenta haga click en este link:<br><br>' +
-                  '<a href="' + process.env.APP_BASE_URL + '\/resetPassword\/' + token.token + 
+                  '<a href="' + process.env.HOST+ '\/resetPassword\/' + token.token + 
                   '" target="_blank">Restablecer Contraseña</a>.<br>'
         };
 

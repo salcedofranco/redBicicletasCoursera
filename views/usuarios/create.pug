@@ -2,13 +2,13 @@ extends ../layout
 
 block content
   .container-fluid
-    a(href='/usuarios') Volver
+    a(href='/usuarios' class="btn btn-link") Volver
 
     br
     br
     br
 
-    h1  Nuevo Usuario
+    h1.text-center Nuevo Usuario
 
     br
     br
@@ -39,6 +39,5 @@ block content
             if errors.confirm_password
                 small#confirm_passwordHelp.text-danger
                 = errors.confirm_password.message  
-        br
         br
         input.btn.btn-primary(type='submit' value='OK')

@@ -48,8 +48,8 @@ app.use(session({
 
 //mongoose
 var mongoose = require('mongoose');
-const usuario = require('./models/usuario');
-const token = require('./models/token');
+const Usuario = require('./models/usuario');
+const Token = require('./models/token');
 
 
 //var mongoDB = 'mongodb://localhost/red_bicicletas';
@@ -222,17 +222,13 @@ function loggedIn(req, res, next) {
 }
 
 function validarUsuario(req, res, next) {
-  jwt.verify(req.headers["x-access-token"], req.app.get("secretKey"), function (
-    err,
-    decoded
-  ) {
+  jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function (err, decoded) {
     if (err) {
-      console.log("Error en validar usuario");
-      res.json({ status: "error", message: err.message, data: null });
+      res.json({ status: 'error', message: err.message, data: null });
     } else {
-      console.log("Pasó el usuario:" + req.body.userId);
-      req.body.userId = decode.id;
-      console.log("JWT verify:" + decoded);
+      req.body.userId = decoded.id;
+      console.log('JWT Verify: ' + decoded);
+
       next();
     }
   });
