@@ -11,9 +11,9 @@ if (process.env.NODE_ENV === 'production'){
     }
     mailConfig = sgTransport(options);
   
-  }else{
+  }else {
     if (process.env.NODE_ENV === 'staging' ){
-      console.log('XXXXXXXXXXXXXXXXXXX');
+      console.log('ambiente de desarrollo');
       const options = {
         auth: {
           api_key: process.env.SENDGRID_API_KEY
