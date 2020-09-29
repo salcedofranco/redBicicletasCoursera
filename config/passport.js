@@ -2,6 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookTokenStrategy = require('passport-facebook-token');
+
 const Usuario = require("../models/usuario");
 
 

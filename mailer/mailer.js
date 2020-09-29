@@ -3,25 +3,26 @@ const sgTransport = require('nodemailer-sendgrid-transport');
 
 let mailConfig;
 
-if (process.env.NODE_ENV === 'production'){
+const getMailTransport = ( environment ) => {
+if ( environment === 'production'){
     const options = {
       auth: {
         api_key: process.env.SENDGRID_API_KEY
       }
     }
-    mailConfig = sgTransport(options);
+    return nodemailer.createTransport(sgTransport(options)); 
+  }
   
-  }else{
-    if (process.env.NODE_ENV === 'staging' ){
-      console.log('XXXXXXXXXXXXXXXXXXX');
+  if (environment === 'staging' ){
+     
       const options = {
         auth: {
           api_key: process.env.SENDGRID_API_KEY
         }
       }
-      mailConfig = sgTransport(options);
+      return nodemailer.createTransport(sgTransport(options)); 
   
-    } else {
+    } 
       // all emails are catched by ethereal.email
       mailConfig = {
         host: 'smtp.ethereal.email',
@@ -30,12 +31,9 @@ if (process.env.NODE_ENV === 'production'){
           user: process.env.ETHEREAL_USER,
           pass: process.env.ETHEREAL_PWD
         }
-      };
+      }
+      return nodemailer.createTransport(mailConfig);
     }
-  }
+  
 
-
-
-
-
-module.exports = nodemailer.createTransport(mailConfig);
+module.exports = getMailTransport(process.env.NODE_ENV);

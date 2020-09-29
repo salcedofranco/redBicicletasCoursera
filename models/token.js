@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
+
 const TokenSchema = new Schema({
   usuario: {
     type: mongoose.Schema.Types.ObjectId,
@@ -8,7 +8,7 @@ const TokenSchema = new Schema({
     ref: "Usuario",
   },
   token: { type: String, required: true },
-  createdAt: { type: Date, required: true, default: Date.now, expires: 43200 },
+  fechaCreacion: { type: Date, required: true, default: Date.now(), expires: 43200 },
 });
 
 module.exports = mongoose.model("Token", TokenSchema);

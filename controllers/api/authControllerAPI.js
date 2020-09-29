@@ -1,86 +1,81 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const Usuario = require("../../models/usuario");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const Usuario = require('../../models/usuario');
 
-module.exports = {
-  authenticate: function (req, res, next) {
-    Usuario.findOne({ email: req.body.email }, function (err, userInfo) {
-      console.log(userInfo);
-      if (err) {
-        next(err);
-      } else {
-        if (userInfo === null) {
-          return res.status(401).json({
-            status: "error",
-            message: "Email/Password Inválidos",
-            data: null,
-          });
-        }
-
-        if (userInfo != null && bcrypt.compareSync(req.body.password, userInfo.password)) {
-          const token = jwt.sign(
-            { id: userInfo._id },
-            req.app.get("secretKey"),
-            { expiresIn: "7d" }
-          );
-          res.status(200).json({
-            message: "Usuario encontrado",
-            data: { usuario: userInfo, token: token },
-          });
-        } else {
-          res.status(401).json({
-            status: "error",
-            message: "Email/Password Inválidos",
-            data: null,
-          });
-        }
-      }
-    });
-  },
-
-  forgotPassword: function (req, res, next) {
+exports.authenticate = function (req, res, next) {
     Usuario.findOne({ email: req.body.email }, function (err, usuario) {
-      if (!usuario) {
-        return res.status(401).json({ 
-          message: "No existe el usuario", 
-          data: null });
-        }
-
-      usuario.resetPassword(function (err) {
         if (err) {
-          return next(err);
+            next(err);
+        } else {
+            if (usuario == null) {
+                return res.status(401).json({
+                    status: 'error',
+                    message: 'Invalido email/password!',
+                    data: null
+                });
+            }
+
+            if (usuario != null && bcrypt.compareSync(req.body.password, usuario.password)) {
+                const token = jwt.sign({ id: usuario.id }, req.app.get('secretKey'), { expiresIn: '7d' });
+
+                res.status(200).json({
+                    message: 'Usuario encontrado!',
+                    data: {
+                        usuario: usuario,
+                        token: token
+                    }
+                });
+            } else {
+                res.status(401).json({
+                    status: 'error',
+                    message: 'Invalido email/password!',
+                    data: null
+                });
+            }
+        }
+    });
+};
+
+exports.forgotPassword = function (req, res, next) {
+    Usuario.findOne({ email: req.body.email }, function (err, usuario) {
+        if (!usuario) {
+            res.status(401).json({
+                message: 'No existe el usuario',
+                data: null
+            });
         }
 
-        res.status(200).json({
-          message: "Se envio un email para reestablecer el password",
-          data: null,
-        });
-      });
-    });
-  },
-  
-  authFacebookToken: function (req, res, next) {
-    if (req.user) {
-      req.user.save().then(() => {
-          const token = jwt.sign({ 
-            id: req.user.id },
-            req.app.get("secretKey"),
-            { expiresIn: "7d" }
-          );
+        usuario.resetPassword(function (err) {
+            if (err) {
+                next(err);
+            }
 
-          res.status(200).json({
-            message: "Usuario encontrado o creado!",
-            data: {
-              user: req.user,
-              token: token,
-            },
-          });
-        }).catch((err) => {
-          console.log(err);
-          res.status(500).json({ message: err.message });
+            res.status(200).json({
+                message: 'Se envió un email para restablecer el password',
+                data: null
+            });
         });
+    });
+};
+
+exports.authFacebookToken = function (req, res, next) {
+    if (req.user) {
+        req.user.save().then( () => {
+            const token = jwt.sign({ id: req.user.id }, req.app.get('secretKey'), { expiresIn: '7d' });
+
+            res.status(200).json({
+                message: 'Usuario encontrado o creado!',
+                data: {
+                    user: req.user,
+                    token: token
+                }
+            });
+        }).catch( (err) => {
+            console.log(err);
+            res.status(500).json({ message: err.message });
+        });
+
     } else {
-      res.status(401);
+        res.status(401);
     }
-  },
 };

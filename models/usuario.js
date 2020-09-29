@@ -86,7 +86,7 @@ usuarioSchema.methods.enviar_email_bienvenida = function (cb) {
         }
 
         const mailOptions = {
-            from: process.env.SENDING_EMAIL_ADDRESS,
+            from: 'no-reply@redBicicletas.com',
             to: email_destination,
             subject: 'Verificación de Cuenta',
             text: 'Hola,\n\n' + 'Por favor, para verificar su cuenta haga click en este link:\n\n' +
@@ -116,7 +116,7 @@ usuarioSchema.methods.resetPassword = function (cb) {
         }
 
         const mailOptions = {
-            from: process.env.SENDING_EMAIL_ADDRESS,
+            from: 'no-reply@redbicicletas.com',
             to: email_destination,
             subject: 'Reseteo de Password de Cuenta',
             text: 'Hola,\n\n' + 'Por favor, para resetear el password de su cuenta haga click en este link:\n\n' +
