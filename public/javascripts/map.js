@@ -10,7 +10,7 @@ $.ajax({
     method: 'POST',
     dataType: 'json',
     url: 'api/auth/authenticate',
-    data: { email: 'keko@gmail.com', password: 'keko' },
+    data: { email: 'fcedo13clash@gmail.com', password: 'keko' },
 }).done(function( data ) {
     console.log(data);
 
