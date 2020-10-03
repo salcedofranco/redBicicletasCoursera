@@ -1,13 +1,15 @@
 var mymap = L.map('main_map').setView([-32.98624, -68.87269], 13);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 }).addTo(mymap);
 
 //L.marker([3.4592355,-76.5048994], { title: 'CC. Unico Outlet' }).addTo(mymap); 
 //L.marker([-32.4787,-68.57894], { title: 'CC. Unico Outlet' }).addTo(mymap); 
 
 //llamada a ajax. Reques asincronico , solicitud a web json
+
+/*
 $.ajax({
     dataType: 'json',
     url: 'api/bicicletas',
@@ -21,3 +23,15 @@ $.ajax({
         L.marker(bici.ubicacion, { title: bici.id }).addTo(mymap);
     });
 });
+*/
+
+$.ajax({
+  dataType: "json",
+  url:"api/bicicletas",
+  success: (result) => {
+    console.log(result);
+    result.bicicletas.forEach((bici)=>{
+      L.marker(bici.ubicacion, { title: bici.id }).addTo(mymap);
+    })
+  }
+})
