@@ -11,12 +11,16 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const jwt = require('jsonwebtoken');
 
+//models
+const Usuario = require('./models/usuario');
+const Token = require('./models/token');
 
+//router
 var indexRouter = require('./routes/index');
 var tokenRouter = require("./routes/token");
 var usersRouter = require('./routes/usuarios');
 var bicicletasRouter = require('./routes/bicicletas');
-
+// api routes
 var bicicletasAPIRouter = require('./routes/api/bicicletas');
 var usuariosAPIRouter = require('./routes/api/usuarios');
 var authAPIRouter = require('./routes/api/auth');
@@ -36,6 +40,13 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
+//mongoose 
+var mongoose = require('mongoose');
+const usuario = require('./models/usuario')
+const { assert } = require('console')
+
+
+
 var app = express();
 
 app.set("secretKey", "jwt_pwd_!!223344");
@@ -48,21 +59,15 @@ app.use(session({
     secret: 'red_bicis_!!!***!".!.!.123123',
 }));
 
-//mongoose
-var mongoose = require('mongoose');
-const Usuario = require('./models/usuario');
-const Token = require('./models/token');
-
-
-//var mongoDB = 'mongodb://localhost/red_bicicletas';
-var mongoDB = process.env.MONGO_URI;
-
-mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true });
-mongoose.set('useCreateIndex', true);
+// var mongoDB = 'mongodb://localhost/red_bicicletas';
+const mongoDB = process.env.MONGO_URI;
+mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true, useCreateIndex: true });
+//mongoose.set('useCreateIndex', true);
 mongoose.Promise = global.Promise;
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDb error de conexion: '));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -109,16 +114,26 @@ app.get('/login', function(req, res) {
 
 app.post('/login', function(req, res, next) {
   passport.authenticate('local', function(err, usuario, info){
-    if (err) return next(err);
-    if (!usuario) return res. render('session/login', {info});
-    req.logIn(usuario, function(err) {
-      if (err) return next(err);
+    if (err) { 
+      return next(err);
+    }
+
+    if (!usuario) { 
+      return res.render('session/login', { info });
+    }
+
+    req.logIn(usuario, function (err) {
+      if (err) {
+        return next(err);
+      }
+
       return res.redirect('/');
     });
+
   })(req, res, next);
 });
 
-app.get('/logout', function(req, res){
+app.get('/logout', function (req, res) {
   req.logOut();
   res.redirect('/');
 });
@@ -129,38 +144,61 @@ app.get('/forgotPassword', function(req, res){
 
 });
 
-app.post('forgotPassword', function(req, res) {
-  usuario.findOne({ email: req.body.email }, function(err, usuario) {
-    if (!usuario) return res.render('session/forgotPassword', {info: {message: 'No existe el email para el usuario existente'}});
+app.post('/forgotPassword', function(req, res, next) {
+  Usuario.findOne({ email: req.body.email }, function (err, usuario) {
+    if (!usuario) {
+       return res.render('session/forgotPassword', {
+         info: { message: 'No existe el email para el usuario existente' }
+      });
+    }
 
-    usuario.resetPassword(function(err){
+    usuario.resetPassword(function (err) {
       if (err) return next(err);
-      console.log('session/forgotPasswordMessage');
+       console.log('session/forgotPasswordMessage'); 
     });
 
     res.render('session/forgotPasswordMessage')
   });
 });
 
-app.get('/resetPassword/:token', function(req, res, next){
+app.get('/resetPassword/:token', function(req, res, next) {
   Token.findOne({ token: req.params.token }, function (err, token) {
-    if (!token) return res.status(400).send({ type: 'not-verified', msg: 'No existe usuario asociado al token. Verifique que su token no haya expirado' });
+    if (!token) {
+      return res.status(400).send({ 
+        type: 'not-verified', 
+        msg: 'No existe usuario asociado al token. Verifique que su token no haya expirado' 
+      });
+    } 
     
-    usuario.findById(token._userId, function (err, usuario) {
-      if (!usuario) return res.status(400).send({ msg: 'No existe un usuario asociado al token'})
-      res.render('session/resetPassword', {errors: {}, usuario:usuario});
+    Usuario.findById(token.usuario, function (err, usuario) {
+      if (!usuario) { 
+        return res.status(400).send({ 
+          msg: 'No existe un usuario asociado al token'
+      });
+    }
+
+      res.render('session/resetPassword', { errors: {}, usuario:usuario });
     });
   });
 });
 
+
 app.post('/resetPassword', function(req, res){
   if (req.body.password != req.body.confirm_password) {
-    res.render('session/resetPassword', { errors: {confirm_password: {message: 'No coincide con el password ingresado'}}})
+    res.render('session/resetPassword', { 
+      errors: {
+        confirm_password: {
+          message: 'No coincide con el password ingresado'
+        }
+      },
+    usuario: new Usuario({ email: req.body.email })
+  });
     return;
   } 
 
-  Usuario.findOne({ email: req.body.email }, function (err, usuario){
+  Usuario.findOne({ email: req.body.email }, function (err, usuario) {
     usuario.password = req.body.password;
+    
     usuario.save(function(err){
       if (err) {
         res.render('session/resetPassword', {
