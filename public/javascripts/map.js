@@ -13,7 +13,7 @@ $.ajax({
     method: 'POST',
     dataType: 'json',
     url: 'api/auth/authenticate',
-    data: { email: 'demo123@gmail.com', password: 'demo123' },
+    data: { email: 'demosendgrid123@gmail.com', password: 'keko' },
 }).done(function( data ) {
     console.log(data);
 
