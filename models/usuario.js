@@ -86,7 +86,7 @@ usuarioSchema.methods.enviar_email_bienvenida = function (cb) {
         }
 
         const mailOptions = {
-            from: 'no-reply@redBicicletas.com',
+            from: 'demosendgrid123@gmail.com',
             to: email_destination,
             subject: 'Verificación de Cuenta',
             text: 'Hola,\n\n' + 'Por favor, para verificar su cuenta haga click en este link:\n\n' +
@@ -116,7 +116,7 @@ usuarioSchema.methods.resetPassword = function (cb) {
         }
 
         const mailOptions = {
-            from: 'no-reply@redbicicletas.com',
+            from: 'demosendgrid123@gmail.com',
             to: email_destination,
             subject: 'Reseteo de Password de Cuenta',
             text: 'Hola,\n\n' + 'Por favor, para resetear el password de su cuenta haga click en este link:\n\n' +
