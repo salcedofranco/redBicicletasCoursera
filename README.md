@@ -1,6 +1,5 @@
 <h1 style="color:green">Red de bicicletas. Coursera</h1>
 
-
 ## Instalar Modulos de Node
 
 Ejecute `npm install` dentro de la carpeta del proyecto **red-bicicletas**, para descargar los paquetes o modulos de node requeridos para poder ejecutar la aplicacion. 
@@ -41,7 +40,9 @@ Ingreso con cuenta de google o:
 email: demosendgrid123@gmail.com
 contraseña: keko
 
+## Bicicletas
 
+Para agregar bicicletas se pueden ver coordenadas en google maps de latitud y longitud
 
 ## Aplicacion publicada en Heroku
 
