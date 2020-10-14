@@ -1,10 +1,9 @@
-# Red Bicicletas
+<h1 style="color:green">Red de bicicletas. Coursera</h1>
 
-Este proyecto fue generado con [Node JS](https://nodejs.org/es/) version 12.16.3.
 
 ## Instalar Modulos de Node
 
-Ejecute `npm install` dentro de la carpeta del proyecto **red-bicicletas**, para descargar los paquetes o modulos de node requeridos para poder ejecutar la aplicaciÃ³n. 
+Ejecute `npm install` dentro de la carpeta del proyecto **red-bicicletas**, para descargar los paquetes o modulos de node requeridos para poder ejecutar la aplicacion. 
 
 ## Servidor de Desarrollo
 
@@ -34,7 +33,6 @@ Ejecute `npm test` para ejecutar las pruebas de modelos de Bicicleta y Usuario y
 ## Endpoint de la API de Autenticacion
 
 1. API POST Auth => `http://localhost:3000/api/auth/authenticate`
-
 
 
 ## Aplicacion publicada en Heroku
