@@ -34,6 +34,14 @@ Ejecute `npm test` para ejecutar las pruebas de modelos de Bicicleta y Usuario y
 
 1. API POST Auth => `http://localhost:3000/api/auth/authenticate`
 
+## Credenciales:
+
+Ingreso con cuenta de google o:
+
+email: demosendgrid123@gmail.com
+contraseña: keko
+
+
 
 ## Aplicacion publicada en Heroku
 
